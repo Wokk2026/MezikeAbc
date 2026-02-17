@@ -1,5 +1,5 @@
 ---
-// Mézike ABC - Főoldal (Harmonizált színekkel és Szamár-védelemmel)
+// Mézike ABC - Főoldal (Minden javítással: Gomb + Interaktív Mézike)
 const boltNev = "Mézike ABC";
 const telefon = "+3612853245"; 
 const cim = "1238 Budapest, Grassalkovich út (A nagy templom mögött)";
@@ -112,15 +112,9 @@ import EventCard from '../components/EventCard.astro';
 
             /* Szamár (Bal oldal) */
             #szamar-wrapper {
-                position: fixed;
-                left: -300px;
-                bottom: 100px;
-                z-index: 2500;
+                position: fixed; left: -300px; bottom: 100px; z-index: 2500;
                 transition: left 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-                display: flex;
-                flex-direction: column;
-                align-items: flex-end;
-                pointer-events: none;
+                display: flex; flex-direction: column; align-items: flex-end; pointer-events: none;
             }
             #szamar-wrapper.show { left: 20px; }
             #szamar-img { width: 220px; filter: drop-shadow(5px 5px 15px rgba(0,0,0,0.2)); }
@@ -132,39 +126,27 @@ import EventCard from '../components/EventCard.astro';
             }
             #szamar-wrapper.show #szamar-bubble { opacity: 1; }
 
-			/* Botanical & Highlight */
-            .botanical-section {
-                background-color: var(--botanical-bg);
-                padding: 5rem 0;
-                border-top: 5px solid var(--shrek-green);
-                border-bottom: 5px solid var(--shrek-green);
-                text-align: center;
-                position: relative;
-            }
-            .botanical-title {
-                color: var(--deep-brown);
-                font-size: 2.5rem;
-                position: relative;
-                display: inline-block;
-                margin: 0 auto 1.5rem auto;
-                padding: 0 70px;
-            }
-            .botanical-title::before, .botanical-title::after { content: '🌿'; font-size: 2.2rem; position: absolute; top: 50%; transform: translateY(-50%); }
-            .botanical-title::before { left: 0; } .botanical-title::after { right: 0; }
-
-			/* Mézike & Shrek */
+            /* Mézike (Jobb oldal) */
             #mezike-wrapper {
-                position: fixed; right: -50px; top: 60%; z-index: 2000;
-                transition: right 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+                position: fixed; right: 20px; top: 60%; z-index: 2000;
                 display: flex; align-items: center; cursor: pointer;
             }
-            #mezike-wrapper:hover { right: 0px; }
-            #mezike-img { width: 120px; }
+            #mezike-img { width: 120px; transition: transform 0.3s; }
+            #mezike-img:hover { transform: scale(1.1) rotate(5deg); }
+            #mezike-bubble {
+                background: white; padding: 12px 20px; border-radius: 20px 20px 0 20px;
+                box-shadow: 0 5px 15px rgba(0,0,0,0.1); border: 2px solid var(--ginger-brown);
+                font-weight: bold; font-size: 0.9rem; margin-right: 15px;
+                opacity: 0; visibility: hidden; transition: 0.3s; color: var(--deep-brown);
+                white-space: nowrap;
+            }
+            #mezike-bubble.show { opacity: 1; visibility: visible; transform: translateY(-10px); }
 
+            /* Shrek (Lent középen) */
             #shrek-footer-wrapper {
                 position: fixed; bottom: -190px; left: 50%; transform: translateX(-50%);
-                z-index: 1900; transition: bottom 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-                cursor: pointer; display: flex; flex-direction: column; align-items: center;
+                z-index: 1900; transition: bottom 0.5s; cursor: pointer;
+                display: flex; flex-direction: column; align-items: center;
             }
             #shrek-footer-wrapper:hover { bottom: -30px; }
             #shrek-head { width: 280px; }
@@ -179,8 +161,8 @@ import EventCard from '../components/EventCard.astro';
 	</head>
 	<body>
         <div id="szamar-wrapper">
-            <div id="szamar-bubble">NE NYOMD MEG! Meglátod az akciós sütiket és elköltöd az összes pénzed! 😱💸</div>
-            <img src="szamar.png" id="szamar-img" alt="Szamár" />
+            <div id="szamar-bubble">NE NYOMD MEG! Meglátod az akciós sütiket! 😱💸</div>
+            <img src="/szamar.png" id="szamar-img" alt="Szamár" />
         </div>
 
         <div id="mezike-wrapper">
@@ -189,7 +171,7 @@ import EventCard from '../components/EventCard.astro';
         </div>
 
         <div id="shrek-footer-wrapper">
-            <div id="shrek-bubble">GYERE BE A BOLTBA, VAGY... ÖSSZENYÁLKAŹLAK! 🧅</div>
+            <div id="shrek-bubble">GYERE BE A BOLTBA! 🧅</div>
             <img src="/shrek.png" id="shrek-head" alt="Shrek" />
         </div>
 
@@ -219,21 +201,21 @@ import EventCard from '../components/EventCard.astro';
 						<div class="card-tag">KÖRNYEZET</div>
 						<div class="card-content">
 							<h3>🏰 Műemléki tér</h3>
-							<p>Pihenj meg a nagy templom mögötti szoborparkban, közvetlenül a boltunk előtt.</p>
+							<p>Pihenj meg a nagy templom mögötti szoborparkban.</p>
 						</div>
 					</div>
 					<div class="card">
 						<div class="card-tag">STÍLUS</div>
 						<div class="card-content">
 							<h3>💚 Shrek tematika</h3>
-							<p>Mézike szeretettel vár a megújult, tágas és mesés belső térben.</p>
+							<p>Mézike szeretettel vár a mesés belső térben.</p>
 						</div>
 					</div>
 					<div class="card">
 						<div class="card-tag">KÖZÖSSÉG</div>
 						<div class="card-content">
 							<h3>🎁 Vidám programok</h3>
-							<p>Szezonális tombolák és jelmezversenyek várnak minden hónapban.</p>
+							<p>Szezonális tombolák és versenyek minden hónapban.</p>
 						</div>
 					</div>
 				</div>
@@ -242,37 +224,26 @@ import EventCard from '../components/EventCard.astro';
 			<section class="sales-cta-zone reveal">
 				<div class="container">
 					<h2 style="color: var(--deep-brown); margin-bottom: 2rem;">Vigyázat! Mocsári Árak!</h2>
-					<a href="/akciok" class="ginger-crack-btn" id="sales-trigger-btn">
-						Nézd meg az akciókat! 🍪
-					</a>
+					<a href="/akciok" class="ginger-crack-btn" id="sales-trigger-btn">Nézd meg az akciókat! 🍪</a>
 				</div>
 			</section>
 
 			<section class="container reveal">
                 <h2 style="text-align: center; color: var(--ginger-brown); font-size: 2.2rem;">🎭 Közelgő Események</h2>
                 <div class="card-grid">
-                    {
-                      esemenyek.slice(0, 3).map((e) => (
+                    {esemenyek.slice(0, 3).map((e) => (
                         <EventCard esemeny={e} full={false} />
-                      ))
-                    }
+                    ))}
                 </div>
             </section>
-
-			<section class="botanical-section">
-				<div class="container">
-					<h2 class="botanical-title">Élet a téren</h2>
-					<p>Karneválok és vásárok közvetlenül a boltunk előtt. <strong>Ugorj be hozzánk közben!</strong></p>
-				</div>
-			</section>
 
 			<section class="container" style="text-align: center;">
 				<div style="background: var(--shrek-green); color: white; border-radius: 40px; padding: 4rem; border: 4px solid var(--deep-brown);">
 					<h2>🧸 Gyermekbarát Birodalom</h2>
 					<p>Rengeteg játék és édesség várja a legkisebbeket!</p>
-					<a href="https://share.google/JHBOt52KVOOVVpPED" target="_blank" class="btn" style="background: white; color: var(--deep-brown); margin-top: 1.5rem; padding: 15px 35px; border-radius: 50px; text-decoration: none; display: inline-block; box-shadow: 0 4px 15px rgba(0,0,0,0.1); transition: 0.3s;">
-    Irány a Bolt! →
-</a>
+					<a href="https://share.google/JHBOt52KVOOVVpPED" target="_blank" class="btn" style="background: white; color: var(--deep-brown); margin-top: 1.5rem; padding: 15px 35px; border-radius: 50px; text-decoration: none; display: inline-block; box-shadow: 0 4px 15px rgba(0,0,0,0.1); font-weight: bold; transition: 0.3s;">
+                        Irány a Bolt! →
+                    </a>
 				</div>
 			</section>
 		</main>
@@ -292,31 +263,26 @@ import EventCard from '../components/EventCard.astro';
             }, { threshold: 0.1 });
             document.querySelectorAll('section').forEach(s => observer.observe(s));
 
-            // SZAMÁR LOGIKA (Több üzenettel)
+            // SZAMÁR LOGIKA
             const szamar = document.getElementById('szamar-wrapper');
-            const bubble = document.getElementById('szamar-bubble');
+            const sBubble = document.getElementById('szamar-bubble');
             const salesBtn = document.getElementById('sales-trigger-btn');
-            const msgs = [
-                "NE NYOMD MEG! Meglátod az akciós sütiket és elköltöd az összes pénzed! 😱",
-                "Shrek azt mondta, aki rákattint, annak ki kell takarítania a mocsarat! Ne kockáztass!",
-                "Hallod, én csak jót akarok! Ha bemész az akciókhoz, sosem jössz ki üres kézzel!",
-                "Állj meg! Inkább vegyél nekem egy kis zabot, ne költsd el a pénzed akciós fánkra!"
-            ];
+            const sMsgs = ["NE NYOMD MEG! 😱", "Shrek haragudni fog! 👹", "Elköltöd az összes pénzed! 💸"];
 
-            const showSzamar = () => {
-                bubble.innerText = msgs[Math.floor(Math.random() * msgs.length)];
+            salesBtn.addEventListener('mouseenter', () => {
+                sBubble.innerText = sMsgs[Math.floor(Math.random() * sMsgs.length)];
                 szamar.classList.add('show');
-            };
-
-            salesBtn.addEventListener('mouseenter', showSzamar);
+            });
             salesBtn.addEventListener('mouseleave', () => szamar.classList.remove('show'));
-            salesBtn.addEventListener('touchstart', (e) => { showSzamar(); setTimeout(() => szamar.classList.remove('show'), 4000); });
 
-            // MÉZIKE & SHREK
+            // MÉZIKE LOGIKA (Interaktív buborék)
             const mezike = document.getElementById('mezike-wrapper');
             const mBubble = document.getElementById('mezike-bubble');
+            const mMsgs = ["Szia! Süti van? 🍪", "Ma is szép a templom! 🌿", "Ne edd meg a gombjaimat! 😱", "Láttad az akciókat? 👹"];
+
             mezike.addEventListener('click', () => {
-                mBubble.classList.toggle('show');
+                mBubble.innerText = mMsgs[Math.floor(Math.random() * mMsgs.length)];
+                mBubble.classList.add('show');
                 setTimeout(() => mBubble.classList.remove('show'), 3000);
             });
         </script>
