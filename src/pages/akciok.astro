@@ -1,5 +1,5 @@
 ---
-// Mézike ABC - Akciós oldal (Master Base)
+// Mézike ABC - Akciós oldal (Javított, Professzionális verzió)
 const boltNev = "Mézike ABC";
 const telefon = "+3612853245"; 
 const cim = "1238 Budapest, Grassalkovich út (A nagy templom mögött)";
@@ -16,6 +16,7 @@ const cim = "1238 Budapest, Grassalkovich út (A nagy templom mögött)";
 				--shrek-green: #7dbb42;
 				--warm-cream: #fff9f0;
 				--deep-brown: #5d3a1a;
+                --glow-green: rgba(125, 187, 66, 0.4);
 			}
 
 			html { scroll-behavior: smooth; }
@@ -31,7 +32,7 @@ const cim = "1238 Budapest, Grassalkovich út (A nagy templom mögött)";
 
 			.container { max-width: 900px; margin: 0 auto; padding: 0 20px; position: relative; z-index: 10; }
 			
-			/* Navigáció (Master Base) */
+			/* Navigáció */
 			header { 
 				background: rgba(255, 255, 255, 0.95); 
 				backdrop-filter: blur(5px);
@@ -53,10 +54,11 @@ const cim = "1238 Budapest, Grassalkovich út (A nagy templom mögött)";
 				background-position: center;
 				border-radius: 0 0 50px 50px;
                 color: white;
+                border-bottom: 6px solid var(--ginger-brown);
 			}
 
 			/* Akciós kártyák */
-			.akcio-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; margin: 4rem 0; }
+			.akcio-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; margin: 4rem 0; }
 			.akcio-card { 
 				background: white; 
 				padding: 0; 
@@ -64,20 +66,20 @@ const cim = "1238 Budapest, Grassalkovich út (A nagy templom mögött)";
 				overflow: hidden;
 				box-shadow: 0 10px 30px rgba(0,0,0,0.1);
 				border: 3px solid var(--ginger-brown);
-                transition: 0.3s;
+                transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
                 position: relative;
                 z-index: 20;
 			}
-            .akcio-card:hover { transform: translateY(-5px); border-color: var(--shrek-green); }
-            .akcio-tag { background: var(--shrek-green); color: white; padding: 10px; text-align: center; font-weight: bold; }
+            .akcio-card:hover { transform: translateY(-10px); border-color: var(--shrek-green); box-shadow: 0 15px 35px var(--glow-green); }
+            .akcio-tag { background: var(--shrek-green); color: white; padding: 10px; text-align: center; font-weight: bold; letter-spacing: 1px; }
             .akcio-info { padding: 2rem; text-align: center; }
-            .price { font-size: 2.5rem; color: var(--ginger-brown); font-weight: bold; display: block; }
+            .price { font-size: 2.5rem; color: var(--ginger-brown); font-weight: bold; display: block; margin: 10px 0; }
 
-            /* INTERAKTÍV FIONA (Bal oldal) */
+            /* INTERAKTÍV FIONA (Javított stílusokkal) */
             #fiona-wrapper {
                 position: fixed;
-                left: -200px; /* Rejtve bal oldalon */
-                bottom: 50px;
+                left: -300px; /* Rejtve */
+                bottom: 40px;
                 z-index: 1500;
                 transition: left 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
                 display: flex;
@@ -85,41 +87,37 @@ const cim = "1238 Budapest, Grassalkovich út (A nagy templom mögött)";
                 align-items: flex-start;
                 pointer-events: none;
             }
-            #fiona-wrapper.show {
-                left: 20px; /* Beúszik */
-            }
-            #fiona-img {
-                width: 180px;
-                filter: drop-shadow(5px 5px 15px rgba(0,0,0,0.2));
-            }
-            #fiona-bubble {
-                background: white;
-                padding: 15px 20px;
-                border-radius: 20px 20px 20px 0;
-                box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-                border: 3px solid var(--shrek-green);
-                font-weight: bold;
-                margin-bottom: 10px;
-                max-width: 250px;
-                color: var(--deep-brown);
+            #fiona-wrapper.show { left: 20px; }
+            
+            #fiona-img { 
+                width: 180px; 
+                filter: drop-shadow(5px 5px 15px rgba(0,0,0,0.2)); 
             }
 
-            /* HULLÓ SÜTIK TÁROLÓJA */
+            #fiona-bubble {
+                background: white;
+                padding: 15px 25px;
+                border-radius: 25px 25px 25px 0;
+                box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+                border: 3px solid var(--shrek-green);
+                font-weight: bold;
+                margin-bottom: 15px;
+                max-width: 280px;
+                color: var(--deep-brown);
+                opacity: 0;
+                transition: 0.3s;
+                transform: translateY(10px);
+            }
+            #fiona-wrapper.show #fiona-bubble { opacity: 1; transform: translateY(0); }
+
+            /* HULLÓ SÜTIK */
             #cookie-shower {
-                position: fixed;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                pointer-events: none;
-                z-index: 5;
+                position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+                pointer-events: none; z-index: 5;
             }
             .falling-cookie {
-                position: absolute;
-                font-size: 4.5rem; /* Nagy és felismerhető */
-                user-select: none;
-                z-index: 5;
-                filter: drop-shadow(0 5px 5px rgba(0,0,0,0.1));
+                position: absolute; font-size: 4rem; user-select: none;
+                filter: drop-shadow(0 5px 8px rgba(0,0,0,0.15));
             }
 
 			footer { background: var(--deep-brown); color: white; padding: 4rem 0; text-align: center; }
@@ -130,7 +128,7 @@ const cim = "1238 Budapest, Grassalkovich út (A nagy templom mögött)";
 
         <div id="fiona-wrapper">
             <div id="fiona-bubble">Shrek szerint ezek az árak még nála is zöldebbek! 💚</div>
-            <img src="fiona.png" id="fiona-img" alt="Fiona hercegnő" />
+            <img src="/fiona.png" id="fiona-img" alt="Fiona hercegnő" />
         </div>
 
 		<header>
@@ -147,8 +145,8 @@ const cim = "1238 Budapest, Grassalkovich út (A nagy templom mögött)";
 		<main>
 			<section class="hero-akciok">
 				<div class="container">
-					<h1 style="font-size: 3rem;">Nagylepény Akciós Kunyhója</h1>
-					<p>Süteményes eső és mocsári árak várnak!</p>
+					<h1 style="font-size: 3.5rem; margin-bottom: 0.5rem;">Nagylepény Akciós Kunyhója</h1>
+					<p style="font-size: 1.2rem;">Süteményes eső és mocsári árak várnak!</p>
 				</div>
 			</section>
 
@@ -192,7 +190,7 @@ const cim = "1238 Budapest, Grassalkovich út (A nagy templom mögött)";
 		</footer>
 
         <script>
-            // SÜTI-ESŐ LOGIKA (Csak a széleken)
+            // SÜTI-ESŐ LOGIKA (Gördülékenyebb verzió)
             const shower = document.getElementById('cookie-shower');
             const cookies = ['🍪', '🧁', '🥯', '🥨', '🍩'];
             
@@ -201,14 +199,13 @@ const cim = "1238 Budapest, Grassalkovich út (A nagy templom mögött)";
                 cookie.className = 'falling-cookie';
                 cookie.innerText = cookies[Math.floor(Math.random() * cookies.length)];
                 
-                // Eldönti: bal oldal (0-15%) vagy jobb oldal (85-100%)
                 const isLeft = Math.random() > 0.5;
                 const posX = isLeft ? (Math.random() * 15) : (85 + Math.random() * 10);
                 
                 cookie.style.left = posX + '%';
                 cookie.style.top = '-100px';
                 
-                const speed = 2 + Math.random() * 3;
+                const speed = 3 + Math.random() * 4;
                 let posY = -100;
                 let rotation = 0;
 
@@ -216,11 +213,11 @@ const cim = "1238 Budapest, Grassalkovich út (A nagy templom mögött)";
 
                 function animate() {
                     posY += speed;
-                    rotation += 0.5; // Lassabb, szebb forgás
+                    rotation += 1;
                     cookie.style.top = posY + 'px';
                     cookie.style.transform = `rotate(${rotation}deg)`;
 
-                    if (posY < window.innerHeight) {
+                    if (posY < window.innerHeight + 100) {
                         requestAnimationFrame(animate);
                     } else {
                         cookie.remove();
@@ -228,29 +225,25 @@ const cim = "1238 Budapest, Grassalkovich út (A nagy templom mögött)";
                 }
                 requestAnimationFrame(animate);
             }
+            setInterval(dropCookie, 600);
 
-            // Süti-eső indítása
-            setInterval(dropCookie, 800);
-
-            // FIONA INTERAKCIÓ
+            // FIONA INTERAKCIÓ (Javított véletlenszerű üzenetekkel)
             const cards = document.querySelectorAll('.akcio-card');
             const fiona = document.getElementById('fiona-wrapper');
             const bubble = document.getElementById('fiona-bubble');
             
             const fionaMsgs = [
-                "Shrek azt hitte, én vagyok az egyetlen kincs, de még nem látta a Mézike akcióit!",
-                "Ezek az árak szebbek, mint egy naplemente a mocsárban.",
-                "Végre valami, ami nem hagyma! Bár a hagymát is szeretjük...",
-                "Nagylepény receptje titkos, de ezek a kedvezmények nem!",
-                "Farkas is ezt enné, ha nem a nagymamával lenne elfoglalva.",
-                "Sárkány azt mondta, ezek az árak perzselően jók!",
-                "Siess, mert Szamár már majdnem mindet megette!"
+                "Shrek azt hitte, én vagyok az egyetlen kincs, de nézd ezeket az árakat! ✨",
+                "Ezek az árak szebbek, mint egy naplemente a mocsárban. 🌅",
+                "Végre valami, ami nem hagyma! Bár a hagymát is szeretjük... 🧅",
+                "Nagylepény receptje titkos, de ezek a kedvezmények nem! 🤫",
+                "Sárkány azt mondta, ezek az árak perzselően jók! 🔥",
+                "Siess, mert Szamár már majdnem mindet megette! 🐴"
             ];
 
             cards.forEach(card => {
                 card.addEventListener('mouseenter', () => {
-                    const randomMsg = fionaMsgs[Math.floor(Math.random() * fionaMsgs.length)];
-                    bubble.innerText = randomMsg;
+                    bubble.innerText = fionaMsgs[Math.floor(Math.random() * fionaMsgs.length)];
                     fiona.classList.add('show');
                 });
                 
