@@ -1,0 +1,16 @@
+[
+  {
+    "id": 1,
+    "datum": "2026. Március 15.",
+    "cim": "Próba esemény1",
+    "rovid": "Vegyél részt sorsolásunkon és nyerj értékes Mézike kosarakat!",
+    "reszletes": "Ugorj be hozzánk egy bevásárlásra, és vegyél részt az ünnepi sorsolásunkon! Értékes ajándékkosarak várnak gazdára Mézike jóvoltából."
+  },
+  {
+    "id": 2,
+    "datum": "2026. Április 4.",
+    "cim": "Próba esemény2",
+    "rovid": "Mesehősök versenye a templom mögötti téren.",
+    "reszletes": "Várjuk a legkisebbeket a kedvenc mesehősük jelmezében! A legjobb Shrek-világ jelmezek külön jutalmat kapnak."
+  }
+]

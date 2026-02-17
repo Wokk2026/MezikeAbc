@@ -1,0 +1,263 @@
+---
+// Mézike ABC - Akciós oldal (Master Base)
+const boltNev = "Mézike ABC";
+const telefon = "+3612853245"; 
+const cim = "1238 Budapest, Grassalkovich út (A nagy templom mögött)";
+---
+
+<html lang="hu">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width" />
+		<title>Akciók - {boltNev}</title>
+		<style>
+			:root {
+				--ginger-brown: #d2691e;
+				--shrek-green: #7dbb42;
+				--warm-cream: #fff9f0;
+				--deep-brown: #5d3a1a;
+			}
+
+			html { scroll-behavior: smooth; }
+
+			body {
+				font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+				background: var(--warm-cream);
+				color: var(--deep-brown);
+				margin: 0;
+				line-height: 1.6;
+                overflow-x: hidden;
+			}
+
+			.container { max-width: 900px; margin: 0 auto; padding: 0 20px; position: relative; z-index: 10; }
+			
+			/* Navigáció (Master Base) */
+			header { 
+				background: rgba(255, 255, 255, 0.95); 
+				backdrop-filter: blur(5px);
+				padding: 1rem 0; 
+				border-bottom: 4px solid var(--shrek-green);
+				position: sticky; top: 0; z-index: 1000;
+			}
+			.nav-flex { display: flex; justify-content: space-between; align-items: center; }
+			.logo { font-size: 1.5rem; font-weight: bold; color: var(--ginger-brown); text-decoration: none; }
+            nav a { margin: 0 15px; text-decoration: none; color: var(--deep-brown); font-weight: 600; transition: 0.3s; }
+            nav a:hover { color: var(--shrek-green); }
+
+			/* Hero szekció */
+			.hero-akciok { 
+				padding: 5rem 0; 
+				text-align: center; 
+				background: linear-gradient(rgba(93, 58, 26, 0.7), rgba(93, 58, 26, 0.7)), url('https://images.unsplash.com/photo-1512484491140-5a7c2957975c?auto=format&fit=crop&q=80&w=1200');
+				background-size: cover;
+				background-position: center;
+				border-radius: 0 0 50px 50px;
+                color: white;
+			}
+
+			/* Akciós kártyák */
+			.akcio-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; margin: 4rem 0; }
+			.akcio-card { 
+				background: white; 
+				padding: 0; 
+				border-radius: 30px; 
+				overflow: hidden;
+				box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+				border: 3px solid var(--ginger-brown);
+                transition: 0.3s;
+                position: relative;
+                z-index: 20;
+			}
+            .akcio-card:hover { transform: translateY(-5px); border-color: var(--shrek-green); }
+            .akcio-tag { background: var(--shrek-green); color: white; padding: 10px; text-align: center; font-weight: bold; }
+            .akcio-info { padding: 2rem; text-align: center; }
+            .price { font-size: 2.5rem; color: var(--ginger-brown); font-weight: bold; display: block; }
+
+            /* INTERAKTÍV FIONA (Bal oldal) */
+            #fiona-wrapper {
+                position: fixed;
+                left: -200px; /* Rejtve bal oldalon */
+                bottom: 50px;
+                z-index: 1500;
+                transition: left 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+                display: flex;
+                flex-direction: column;
+                align-items: flex-start;
+                pointer-events: none;
+            }
+            #fiona-wrapper.show {
+                left: 20px; /* Beúszik */
+            }
+            #fiona-img {
+                width: 180px;
+                filter: drop-shadow(5px 5px 15px rgba(0,0,0,0.2));
+            }
+            #fiona-bubble {
+                background: white;
+                padding: 15px 20px;
+                border-radius: 20px 20px 20px 0;
+                box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+                border: 3px solid var(--shrek-green);
+                font-weight: bold;
+                margin-bottom: 10px;
+                max-width: 250px;
+                color: var(--deep-brown);
+            }
+
+            /* HULLÓ SÜTIK TÁROLÓJA */
+            #cookie-shower {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                pointer-events: none;
+                z-index: 5;
+            }
+            .falling-cookie {
+                position: absolute;
+                font-size: 4.5rem; /* Nagy és felismerhető */
+                user-select: none;
+                z-index: 5;
+                filter: drop-shadow(0 5px 5px rgba(0,0,0,0.1));
+            }
+
+			footer { background: var(--deep-brown); color: white; padding: 4rem 0; text-align: center; }
+		</style>
+	</head>
+	<body>
+        <div id="cookie-shower"></div>
+
+        <div id="fiona-wrapper">
+            <div id="fiona-bubble">Shrek szerint ezek az árak még nála is zöldebbek! 💚</div>
+            <img src="fiona.png" id="fiona-img" alt="Fiona hercegnő" />
+        </div>
+
+		<header>
+			<div class="container nav-flex">
+				<a href="/" class="logo">🍪 {boltNev}</a>
+                <nav>
+                    <a href="/">Főoldal</a>
+                    <a href="/akciok">Akciók</a>
+                </nav>
+				<a href="/#kapcsolat" class="btn" style="background: var(--ginger-brown); color: white; padding: 10px 25px; border-radius: 50px; text-decoration: none; font-weight: bold;">Kapcsolat</a>
+			</div>
+		</header>
+
+		<main>
+			<section class="hero-akciok">
+				<div class="container">
+					<h1 style="font-size: 3rem;">Nagylepény Akciós Kunyhója</h1>
+					<p>Süteményes eső és mocsári árak várnak!</p>
+				</div>
+			</section>
+
+			<div class="container">
+				<div class="akcio-grid">
+					<div class="akcio-card">
+						<div class="akcio-tag">MÉZIKÉS AJÁNLAT</div>
+						<div class="akcio-info">
+							<h3>Dupla Csokis Cookie</h3>
+							<span class="price">390 Ft</span>
+							<p>Vigyázz, Mézike ne lássa meg, hogy megeszed a barátait!</p>
+						</div>
+					</div>
+
+					<div class="akcio-card">
+						<div class="akcio-tag">FIONA KEDVENCE</div>
+						<div class="akcio-info">
+							<h3>Mocsári Krémes</h3>
+							<span class="price">550 Ft</span>
+							<p>Zöld, édes, és nincs benne hagyma!</p>
+						</div>
+					</div>
+
+                    <div class="akcio-card">
+						<div class="akcio-tag">NAGYLEPÉNY RECEPTJE</div>
+						<div class="akcio-info">
+							<h3>Óriás Perec</h3>
+							<span class="price">490 Ft</span>
+							<p>Olyan ropogós, hogy Sárkány is ezt eszi.</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</main>
+
+		<footer>
+			<div class="container">
+				<p>📍 {cim}</p>
+				<p>© 2026 {boltNev} - A mocsár legédesebb pontja.</p>
+			</div>
+		</footer>
+
+        <script>
+            // SÜTI-ESŐ LOGIKA (Csak a széleken)
+            const shower = document.getElementById('cookie-shower');
+            const cookies = ['🍪', '🧁', '🥯', '🥨', '🍩'];
+            
+            function dropCookie() {
+                const cookie = document.createElement('div');
+                cookie.className = 'falling-cookie';
+                cookie.innerText = cookies[Math.floor(Math.random() * cookies.length)];
+                
+                // Eldönti: bal oldal (0-15%) vagy jobb oldal (85-100%)
+                const isLeft = Math.random() > 0.5;
+                const posX = isLeft ? (Math.random() * 15) : (85 + Math.random() * 10);
+                
+                cookie.style.left = posX + '%';
+                cookie.style.top = '-100px';
+                
+                const speed = 2 + Math.random() * 3;
+                let posY = -100;
+                let rotation = 0;
+
+                shower.appendChild(cookie);
+
+                function animate() {
+                    posY += speed;
+                    rotation += 0.5; // Lassabb, szebb forgás
+                    cookie.style.top = posY + 'px';
+                    cookie.style.transform = `rotate(${rotation}deg)`;
+
+                    if (posY < window.innerHeight) {
+                        requestAnimationFrame(animate);
+                    } else {
+                        cookie.remove();
+                    }
+                }
+                requestAnimationFrame(animate);
+            }
+
+            // Süti-eső indítása
+            setInterval(dropCookie, 800);
+
+            // FIONA INTERAKCIÓ
+            const cards = document.querySelectorAll('.akcio-card');
+            const fiona = document.getElementById('fiona-wrapper');
+            const bubble = document.getElementById('fiona-bubble');
+            
+            const fionaMsgs = [
+                "Shrek azt hitte, én vagyok az egyetlen kincs, de még nem látta a Mézike akcióit!",
+                "Ezek az árak szebbek, mint egy naplemente a mocsárban.",
+                "Végre valami, ami nem hagyma! Bár a hagymát is szeretjük...",
+                "Nagylepény receptje titkos, de ezek a kedvezmények nem!",
+                "Farkas is ezt enné, ha nem a nagymamával lenne elfoglalva.",
+                "Sárkány azt mondta, ezek az árak perzselően jók!",
+                "Siess, mert Szamár már majdnem mindet megette!"
+            ];
+
+            cards.forEach(card => {
+                card.addEventListener('mouseenter', () => {
+                    const randomMsg = fionaMsgs[Math.floor(Math.random() * fionaMsgs.length)];
+                    bubble.innerText = randomMsg;
+                    fiona.classList.add('show');
+                });
+                
+                card.addEventListener('mouseleave', () => {
+                    fiona.classList.remove('show');
+                });
+            });
+        </script>
+	</body>
+</html>
