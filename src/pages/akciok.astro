@@ -19,6 +19,20 @@ const cim = "1238 Budapest, Grassalkovich út (A nagy templom mögött)";
                 --glow-green: rgba(125, 187, 66, 0.4);
 			}
 
+/* --- GLOBÁLIS SIMÍTÁSOK (Kék keret ellen) --- */
+* {
+    /* Ez a kulcs! Eltünteti a kék villanást mobilon */
+    -webkit-tap-highlight-color: transparent;
+    /* Ez pedig a fókusz keretet tünteti el, ha zavaró */
+    outline: none;
+}
+
+/* Biztos ami biztos alapon a karakterekre külön is rátesszük */
+#szamar-wrapper, #mezike-wrapper, #shrek-footer-wrapper, #fiona-wrapper, a, button {
+    -webkit-tap-highlight-color: transparent;
+    outline: none;
+}
+
 			html { scroll-behavior: smooth; }
 
 			body {
