@@ -1,0 +1,242 @@
+---
+// Mézike ABC - Mocsári Kvíz (Javított, mobilbarát verzió)
+const boltNev = "Mézike ABC";
+const cim = "1238 Budapest, Grassalkovich út (A nagy templom mögött)";
+---
+
+<html lang="hu">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Mocsári Kvíz - {boltNev}</title>
+		<style>
+			:root {
+				--ginger-brown: #d2691e;
+				--shrek-green: #7dbb42;
+				--warm-cream: #fff9f0;
+				--deep-brown: #5d3a1a;
+                --botanical-bg: #f0f7e9;
+			}
+
+            * { -webkit-tap-highlight-color: transparent; outline: none; }
+
+			body {
+				font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+				background: var(--warm-cream);
+				color: var(--deep-brown);
+				margin: 0;
+				line-height: 1.6;
+                overflow-x: hidden;
+			}
+
+			.container { max-width: 800px; margin: 0 auto; padding: 0 20px; }
+			
+			header { 
+				background: rgba(255, 255, 255, 0.95); 
+				padding: 1rem 0; 
+				border-bottom: 4px solid var(--shrek-green);
+				position: sticky; top: 0; z-index: 1000;
+			}
+			.nav-flex { display: flex; justify-content: space-between; align-items: center; }
+            .logo { font-size: 1.5rem; font-weight: bold; color: var(--ginger-brown); text-decoration: none; }
+            nav a { margin: 0 10px; text-decoration: none; color: var(--deep-brown); font-weight: 600; }
+
+			.quiz-box {
+				background: white;
+				padding: 2rem;
+				border-radius: 40px;
+				box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+				border: 4px solid var(--ginger-brown);
+				margin: 3rem 0;
+				text-align: center;
+                position: relative;
+			}
+
+            .question-text { font-size: 1.5rem; font-weight: bold; margin-bottom: 2rem; color: var(--deep-brown); }
+
+            .options-grid { display: grid; gap: 15px; }
+            .option-btn {
+                background: var(--botanical-bg);
+                border: 2px solid var(--shrek-green);
+                padding: 15px 25px;
+                border-radius: 20px;
+                cursor: pointer;
+                font-size: 1.1rem;
+                font-weight: 600;
+                transition: 0.3s;
+                color: var(--deep-brown);
+            }
+            .option-btn:hover { background: var(--shrek-green); color: white; transform: translateY(-3px); }
+
+            #score-board { display: none; }
+            .final-score { font-size: 3rem; color: var(--ginger-brown); font-weight: 800; }
+
+            /* Tüzijáték Canvas */
+            #fireworks {
+                position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+                pointer-events: none; z-index: 2000; display: none;
+            }
+
+            @media (max-width: 600px) {
+                .question-text { font-size: 1.2rem; }
+                .quiz-box { padding: 1.5rem; margin: 1.5rem 0; }
+            }
+
+			footer { background: var(--deep-brown); color: white; padding: 3rem 0; text-align: center; margin-top: 4rem; }
+		</style>
+	</head>
+	<body>
+        <canvas id="fireworks"></canvas>
+
+		<header>
+			<div class="container nav-flex">
+				<a href="/" class="logo">🍪 {boltNev}</a>
+               <nav>
+    <a href="/">Főoldal</a>
+    <a href="/akciok">Akciók</a>
+    <a href="/jatek">Kvíz</a> </nav>
+			</div>
+		</header>
+
+		<main class="container">
+			<div class="quiz-box" id="quiz-container">
+                <div id="progress" style="color: var(--shrek-green); font-weight: bold; margin-bottom: 10px;">Kérdés: 1/10</div>
+				<div class="question-text" id="question">Betöltés...</div>
+                <div class="options-grid" id="options"></div>
+			</div>
+
+            <div class="quiz-box" id="score-board">
+                <h2>Mocsári Kvíz Eredmény</h2>
+                <div class="final-score" id="final-points">0/10</div>
+                <p id="evaluation-text"></p>
+                <button onclick="location.reload()" class="option-btn" style="margin-top: 20px; background: var(--ginger-brown); color: white; border: none;">Új játék</button>
+            </div>
+		</main>
+
+		<footer>
+			<div class="container">
+				<p>📍 {cim}</p>
+				<p>© 2026 {boltNev}</p>
+			</div>
+		</footer>
+
+        <script>
+            const allQuestions = [
+                { q: "Milyen állat Shrek legjobb barátja?", a: ["Szamár", "Macska", "Sárkány"], c: 0 },
+                { q: "Miből van Shrek szerint az ogrék rétege?", a: ["Hagyma", "Káposzta", "Sárgarépa"], c: 0 },
+                { q: "Hol lakik Shrek?", a: ["Várban", "Mocsárban", "Barlangban"], c: 1 },
+                { q: "Hogy hívják Shrek feleségét?", a: ["Fiona", "Hófehérke", "Hamupipőke"], c: 0 },
+                { q: "Milyen színű Shrek?", a: ["Kék", "Sárga", "Zöld"], c: 2 },
+                { q: "Mit szeret Szamár reggelire készíteni?", a: ["Palacsintát", "Rántottát", "Zabot"], c: 0 },
+                { q: "Ki Duloc uralkodója az első részben?", a: ["Lord Farquaad", "Artúr király", "Szőke Herceg"], c: 0 },
+                { q: "Milyen állat Csizmás Kandúr?", a: ["Kutya", "Macska", "Tigris"], c: 1 },
+                { q: "Mi Fiona titka az első filmben?", a: ["Éjjel ogre lesz", "Tud repülni", "Beszél az állatokkal"], c: 0 },
+                { q: "Hogy hívják a mézeskalács figurát?", a: ["Mézike", "Cukorka", "Perec"], c: 0 },
+                { q: "Milyen állat őrizte Fionát a toronyban?", a: ["Sárkány", "Farkas", "Oroszlán"], c: 0 },
+                { q: "Ki Shrek apósa?", a: ["Harold király", "Lajos király", "Zsigmond"], c: 0 },
+                { q: "Hogy hívják a királyságot a második részben?", a: ["Túl az Óperencián", "Mocsárország", "Duloc"], c: 0 },
+                { q: "Ki a Jótündér Keresztanya fia?", a: ["Szőke Herceg", "Lord Farquaad", "Rumpelstiltskin"], c: 0 },
+                { q: "Milyen hangszeren játszik Szamár néha?", a: ["Nem játszik, énekel", "Gitár", "Furulya"], c: 0 },
+                { q: "Mi Shrek kedvenc itala?", a: ["Mocsárvíz", "Sör", "Tej"], c: 0 },
+                { q: "Hány gyereke születik Shreknek és Fionának?", a: ["Egy", "Kettő", "Három"], c: 2 },
+                { q: "Ki Csizmás Kandúr legjobb barátja Shreken kívül?", a: ["Szamár", "Tojás Tóbiás", "Kitty"], c: 1 },
+                { q: "Milyen színű Fiona haja emberként?", a: ["Szőke", "Vörös", "Barna"], c: 1 },
+                { q: "Hogy hívják Szamár és a Sárkány gyerekeit?", a: ["Szamárkányok", "Sárkányok", "Pónik"], c: 0 },
+                { q: "Mi volt Shrek eredeti terve a mocsarával?", a: ["Magányosan élni", "Vidámparkot építeni", "Kiadni"], c: 0 },
+                { q: "Ki volt a 4. rész főgonosza?", a: ["Rumpelstiltskin", "Fiona apja", "A Farkas"], c: 0 },
+                { q: "Milyen állattá változik Harold király?", a: ["Békává", "Macskává", "Egérré"], c: 0 },
+                { q: "Ki Csizmás Kandúr magyar hangja?", a: ["Selmeczi Roland", "Kerekes József", "Stohl András"], c: 0 },
+                { q: "Melyik mesehős a Farkas barátja?", a: ["A három kismalac", "Piroska", "Hófehérke"], c: 0 },
+                { q: "Mi Fiona hercegnő kedvenc dala?", a: ["Madárdal", "Ogre himnusz", "Süti dal"], c: 0 },
+                { q: "Mitől fél Szamár a legjobban?", a: ["A magasságtól", "A víztől", "A pókoktól"], c: 0 },
+                { q: "Milyen ruhát hord Csizmás Kandúr?", a: ["Kalapot és csizmát", "Páncélt", "Semmit"], c: 0 },
+                { q: "Hogy hívják a bárt a mocsár mellett?", a: ["Mérgezett Alma", "Zöld Mocsár", "Vidám Ogre"], c: 0 },
+                { q: "Ki az ogrék királya?", a: ["Shrek (nem akarja)", "Harold", "Artúr"], c: 0 }
+            ];
+
+            let currentQuestions = [];
+            let currentIdx = 0;
+            let score = 0;
+
+            function initQuiz() {
+                currentQuestions = allQuestions.sort(() => 0.5 - Math.random()).slice(0, 10);
+                showQuestion();
+            }
+
+            function showQuestion() {
+                const q = currentQuestions[currentIdx];
+                document.getElementById('progress').innerText = `Kérdés: ${currentIdx + 1}/10`;
+                document.getElementById('question').innerText = q.q;
+                const optionsDiv = document.getElementById('options');
+                optionsDiv.innerHTML = '';
+                
+                q.a.forEach((opt, i) => {
+                    const btn = document.createElement('button');
+                    btn.className = 'option-btn';
+                    btn.innerText = opt;
+                    btn.onclick = () => checkAnswer(i);
+                    optionsDiv.appendChild(btn);
+                });
+            }
+
+            function checkAnswer(idx) {
+                if (idx === currentQuestions[currentIdx].c) score++;
+                currentIdx++;
+                if (currentIdx < 10) showQuestion();
+                else showResult();
+            }
+
+            function showResult() {
+                document.getElementById('quiz-container').style.display = 'none';
+                document.getElementById('score-board').style.display = 'block';
+                document.getElementById('final-points').innerText = `${score}/10`;
+                
+                let eval = "";
+                if (score === 10) eval = "Tökéletes! Te vagy a mocsár királya! 👑";
+                else if (score > 7) eval = "Nagyon ügyes! Shrek büszke lenne rád! 💚";
+                else eval = "Nem rossz, de Szamár szerint többet kellene moziznod! 🐴";
+                
+                document.getElementById('evaluation-text').innerText = eval;
+                startFireworks();
+            }
+
+            // TÜZIJÁTÉK LOGIKA
+            function startFireworks() {
+                const canvas = document.getElementById('fireworks');
+                canvas.style.display = 'block';
+                const ctx = canvas.getContext('2d');
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+
+                const particles = [];
+                function createParticle(x, y) {
+                    for (let i = 0; i < 30; i++) {
+                        particles.push({
+                            x, y,
+                            vx: (Math.random() - 0.5) * 10,
+                            vy: (Math.random() - 0.5) * 10,
+                            age: 0,
+                            color: `hsl(${Math.random() * 360}, 100%, 50%)`
+                        });
+                    }
+                }
+
+                function animate() {
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    if (Math.random() < 0.1) createParticle(Math.random() * canvas.width, Math.random() * canvas.height);
+                    
+                    particles.forEach((p, i) => {
+                        p.x += p.vx; p.y += p.vy; p.age++;
+                        ctx.fillStyle = p.color;
+                        ctx.beginPath(); ctx.arc(p.x, p.y, 3, 0, Math.PI * 2); ctx.fill();
+                        if (p.age > 50) particles.splice(i, 1);
+                    });
+                    requestAnimationFrame(animate);
+                }
+                animate();
+            }
+
+            initQuiz();
+        </script>
+	</body>
+</html>
