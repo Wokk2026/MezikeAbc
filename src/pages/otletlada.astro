@@ -1,5 +1,5 @@
 ---
-// Mézike ABC - Ötletláda 2.0 (Közösségi Fal és Szavazás)
+// Mézike ABC - Ötletláda 4.0 (Örök memória, 5 napos limit és Szabályok)
 const boltNev = "Mézike ABC";
 const cim = "1238 Budapest, Grassalkovich út (A nagy templom mögött)";
 ---
@@ -16,24 +16,21 @@ const cim = "1238 Budapest, Grassalkovich út (A nagy templom mögött)";
 				--warm-cream: #fff9f0;
 				--deep-brown: #5d3a1a;
                 --botanical-bg: #f0f7e9;
+                --gold-glow: #ffd700;
 			}
 
             * { -webkit-tap-highlight-color: transparent; outline: none; box-sizing: border-box; }
 
 			body {
 				font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-				background: var(--warm-cream);
-				color: var(--deep-brown);
-				margin: 0;
+				background: var(--warm-cream); color: var(--deep-brown); margin: 0; overflow-x: hidden;
 			}
 
 			.container { max-width: 900px; margin: 0 auto; padding: 0 20px; }
 			
 			header { 
-				background: rgba(255, 255, 255, 0.95); 
-				padding: 1rem 0; 
-				border-bottom: 4px solid var(--shrek-green);
-				position: sticky; top: 0; z-index: 1000;
+				background: rgba(255, 255, 255, 0.95); padding: 1rem 0; 
+				border-bottom: 4px solid var(--shrek-green); position: sticky; top: 0; z-index: 1000;
 			}
 			.nav-flex { display: flex; justify-content: space-between; align-items: center; }
             .logo { font-size: 1.5rem; font-weight: bold; color: var(--ginger-brown); text-decoration: none; }
@@ -41,91 +38,56 @@ const cim = "1238 Budapest, Grassalkovich út (A nagy templom mögött)";
 
             .main-content { padding: 4rem 0; text-align: center; }
 
-            /* Választó és Beküldő (image_acd13b.png alapján) */
-            .choice-container { display: flex; justify-content: center; gap: 30px; margin-bottom: 2rem; }
+            /* Beküldő felület */
+            .choice-container { display: flex; justify-content: center; gap: 20px; margin-bottom: 2rem; }
             .choice-card {
-                background: white; padding: 1.5rem; border-radius: 30px;
-                border: 3px solid var(--ginger-brown); cursor: pointer; transition: 0.3s; width: 140px;
+                background: white; padding: 1.5rem; border-radius: 30px; border: 3px solid var(--ginger-brown);
+                cursor: pointer; transition: 0.3s; width: 130px;
             }
             .choice-card.active { background: var(--botanical-bg); border-color: var(--shrek-green); }
-            .icon { font-size: 2.5rem; display: block; margin-bottom: 5px; }
 
-            /* Szövegdoboz stílusa */
             #form-section { display: none; margin-bottom: 4rem; }
             #form-section.visible { display: block; }
             textarea {
-                width: 100%; max-width: 500px; height: 120px; border-radius: 20px;
+                width: 100%; max-width: 500px; height: 100px; border-radius: 20px;
                 border: 3px solid var(--ginger-brown); padding: 1rem; margin-bottom: 1rem; resize: none;
             }
-            .send-btn {
-                background: var(--ginger-brown); color: white; border: none;
-                padding: 12px 35px; border-radius: 50px; font-weight: bold; cursor: pointer;
-            }
+            .send-btn { background: var(--ginger-brown); color: white; border: none; padding: 12px 30px; border-radius: 50px; cursor: pointer; font-weight: bold; }
 
-            /* --- KÉTOSZLOPOS TÁROLÓ (ÚJ RÉSZ) --- */
-            .wall-grid {
-                display: grid;
-                grid-template-columns: 1fr 1fr;
-                gap: 30px;
-                margin-top: 4rem;
-                text-align: left;
-            }
-
-            .column-title {
-                text-align: center;
-                color: var(--ginger-brown);
-                border-bottom: 3px solid var(--shrek-green);
-                padding-bottom: 10px;
-                margin-bottom: 20px;
-            }
+            /* --- FAL ÉS KÁRTYÁK --- */
+            .wall-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-top: 2rem; text-align: left; }
+            .column-title { text-align: center; color: var(--ginger-brown); border-bottom: 3px solid var(--shrek-green); margin-bottom: 20px; }
 
             .entry-card {
-                background: white;
-                padding: 1.5rem;
-                border-radius: 20px;
-                border: 2px solid #ddd;
-                margin-bottom: 15px;
-                box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-                transition: 0.3s;
-                position: relative;
+                background: white; padding: 1.5rem; border-radius: 20px; border: 2px solid #ddd;
+                margin-bottom: 15px; transition: 0.5s; position: relative;
             }
 
-            .entry-text { font-size: 0.95rem; margin-bottom: 1rem; }
-
-            /* Szavazás gombok */
-            .vote-bar {
-                display: flex;
-                gap: 15px;
-                align-items: center;
-                border-top: 1px solid #eee;
-                padding-top: 10px;
+            /* --- ZÖLD VILÁGÍTÁS (10 LIKE ESETÉN) --- */
+            .glowing-green {
+                border: 4px solid var(--shrek-green) !important;
+                box-shadow: 0 0 20px var(--shrek-green);
+                background: #fafff5;
+                animation: pulse-green 2s infinite;
             }
 
-            .vote-btn {
-                background: none;
-                border: none;
-                cursor: pointer;
-                font-size: 1.1rem;
-                display: flex;
-                align-items: center;
-                gap: 5px;
-                transition: 0.2s;
-                color: var(--deep-brown);
+            @keyframes pulse-green {
+                0% { box-shadow: 0 0 5px var(--shrek-green); }
+                50% { box-shadow: 0 0 25px var(--shrek-green); }
+                100% { box-shadow: 0 0 5px var(--shrek-green); }
             }
-            .vote-btn:hover { transform: scale(1.2); }
-            .like:hover { color: var(--shrek-green); }
-            .dislike:hover { color: var(--ginger-brown); }
 
-            /* Postaláda animáció konténer */
-            #mailbox-container {
-                position: fixed; bottom: -300px; left: 50%; transform: translateX(-50%);
-                transition: 0.8s; z-index: 2000; font-size: 6rem;
-            }
-            #mailbox-container.up { bottom: 30px; }
+            .vote-bar { display: flex; gap: 15px; align-items: center; border-top: 1px solid #eee; padding-top: 10px; margin-top: 10px; }
+            .vote-btn { background: var(--botanical-bg); border: 1px solid #ddd; cursor: pointer; padding: 5px 12px; border-radius: 12px; transition: 0.2s; position: relative; }
+            .vote-btn:disabled { opacity: 0.3; cursor: not-allowed; }
 
-            @media (max-width: 768px) {
-                .wall-grid { grid-template-columns: 1fr; }
-            }
+            .particle { position: absolute; pointer-events: none; opacity: 0; animation: particle-pop 0.8s forwards; }
+            @keyframes particle-pop { 0% { transform: translate(0,0) scale(0); opacity: 1; } 100% { transform: translate(var(--x), var(--y)) scale(1); opacity: 0; } }
+
+            #mailbox-container { position: fixed; bottom: -200px; left: 50%; transform: translateX(-50%); transition: 0.8s; font-size: 5rem; z-index: 2000; }
+            #mailbox-container.up { bottom: 20px; }
+
+            @media (max-width: 768px) { .wall-grid { grid-template-columns: 1fr; } }
 		</style>
 	</head>
 	<body>
@@ -144,110 +106,130 @@ const cim = "1238 Budapest, Grassalkovich út (A nagy templom mögött)";
 		<main class="container main-content">
             <h1>Mocsári Ötletláda</h1>
             <div class="choice-container">
-                <div class="choice-card" id="btn-otlet">
-                    <span class="icon">💡</span><strong>Ötlet</strong>
-                </div>
-                <div class="choice-card" id="btn-velemeny">
-                    <span class="icon">⭐</span><strong>Vélemény</strong>
-                </div>
+                <div class="choice-card" id="btn-otlet"><span class="icon">💡</span><strong>Ötlet</strong></div>
+                <div class="choice-card" id="btn-velemeny"><span class="icon">⭐</span><strong>Vélemény</strong></div>
             </div>
 
             <div id="form-section">
                 <textarea id="message" placeholder="Írd ide az üzeneted..."></textarea><br>
-                <button class="send-btn" id="send-btn">Küldés a ládába</button>
+                <button class="send-btn" id="send-btn">Beküldés</button>
             </div>
 
             <div class="wall-grid">
-                <div>
-                    <h3 class="column-title">💡 Ötletek</h3>
-                    <div id="otlet-list"></div>
-                </div>
-                <div>
-                    <h3 class="column-title">⭐ Vélemények</h3>
-                    <div id="velemeny-list"></div>
-                </div>
+                <div><h3 class="column-title">💡 Ötletek</h3><div id="otlet-list"></div></div>
+                <div><h3 class="column-title">⭐ Vélemények</h3><div id="velemeny-list"></div></div>
             </div>
 		</main>
 
         <div id="mailbox-container">📮</div>
 
         <script>
-            // Adatok tárolása (Adatbázis híján egyelőre a memóriában)
-            let entries = [
-                { id: 1, type: 'otlet', text: "Legyen Shrek alakú fánk!", score: 5 },
-                { id: 2, type: 'velemeny', text: "Nagyon kedves a kiszolgálás!", score: 8 }
-            ];
+            // --- MEMÓRIA ÉS SZABÁLYOK ---
+            const FIVE_DAYS_MS = 5 * 24 * 60 * 60 * 1000;
+            
+            // Adatok betöltése a böngészőből
+            let entries = JSON.parse(localStorage.getItem('mocsari_uzenetek') || '[]');
+            let votedIds = JSON.parse(localStorage.getItem('voted_posts') || '[]');
 
-            const formSection = document.getElementById('form-section');
             const otletList = document.getElementById('otlet-list');
             const velemenyList = document.getElementById('velemeny-list');
             let currentType = "";
 
-            // Választás logikája
-            document.getElementById('btn-otlet').onclick = () => {
-                currentType = "otlet";
-                formSection.classList.add('visible');
-                document.getElementById('btn-otlet').classList.add('active');
-                document.getElementById('btn-velemeny').classList.remove('active');
-            };
+            // Tiszta mocsár: Töröljük a 10 dislike-os vagy 5 napnál régebbi üzeneteket
+            function cleanup() {
+                const now = Date.now();
+                entries = entries.filter(e => {
+                    const isTooOld = (now - e.createdAt) > FIVE_DAYS_MS;
+                    const isHated = e.dislikes >= 10;
+                    return !isTooOld && !isHated;
+                });
+                save();
+            }
 
-            document.getElementById('btn-velemeny').onclick = () => {
-                currentType = "velemeny";
-                formSection.classList.add('visible');
-                document.getElementById('btn-velemeny').classList.add('active');
-                document.getElementById('btn-otlet').classList.remove('active');
-            };
+            function save() { localStorage.setItem('mocsari_uzenetek', JSON.stringify(entries)); }
 
-            // Beküldés és Animáció
+            // Interakciók
+            document.getElementById('btn-otlet').onclick = () => { currentType = "otlet"; document.getElementById('form-section').classList.add('visible'); };
+            document.getElementById('btn-velemeny').onclick = () => { currentType = "velemeny"; document.getElementById('form-section').classList.add('visible'); };
+
             document.getElementById('send-btn').onclick = () => {
                 const text = document.getElementById('message').value;
                 if(!text) return;
-
-                // Új elem hozzáadása
-                entries.push({ id: Date.now(), type: currentType, text: text, score: 0 });
                 
-                // Postaláda animáció
+                entries.push({
+                    id: Date.now(),
+                    type: currentType,
+                    text: text,
+                    likes: 0,
+                    dislikes: 0,
+                    createdAt: Date.now()
+                });
+                
+                save();
                 const mailbox = document.getElementById('mailbox-container');
                 mailbox.classList.add('up');
-                
-                setTimeout(() => {
-                    mailbox.classList.remove('up');
-                    document.getElementById('message').value = "";
-                    renderWall();
-                }, 2000);
+                setTimeout(() => { mailbox.classList.remove('up'); document.getElementById('message').value = ""; renderWall(); }, 1500);
             };
 
-            // Megjelenítés és szavazás alapú rendezés
-            function renderWall() {
-                otletList.innerHTML = "";
-                velemenyList.innerHTML = "";
+            function spawnParticles(element, emoji) {
+                for (let i = 0; i < 6; i++) {
+                    const p = document.createElement('span');
+                    p.className = 'particle'; p.innerText = emoji;
+                    p.style.setProperty('--x', (Math.random() - 0.5) * 80 + 'px');
+                    p.style.setProperty('--y', (Math.random() - 1) * 60 + 'px');
+                    element.appendChild(p);
+                    setTimeout(() => p.remove(), 800);
+                }
+            }
 
-                // Pontszám szerint csökkenő sorrend
-                const sorted = [...entries].sort((a, b) => b.score - a.score);
+            window.handleVote = (btn, id, isLike) => {
+                if(votedIds.includes(id)) return;
+                const entry = entries.find(e => e.id === id);
+                if(!entry) return;
+
+                if(isLike) {
+                    entry.likes++;
+                    spawnParticles(btn, '🌸');
+                } else {
+                    entry.dislikes++;
+                    spawnParticles(btn, '😡');
+                }
+
+                votedIds.push(id);
+                localStorage.setItem('voted_posts', JSON.stringify(votedIds));
+                save();
+                cleanup(); // Azonnali ellenőrzés a 10 dislike-ra
+                setTimeout(renderWall, 400);
+            };
+
+            function renderWall() {
+                cleanup();
+                otletList.innerHTML = ""; velemenyList.innerHTML = "";
+                
+                // Rangsor: Akinek több a (likes - dislikes) különbsége, az van felül
+                const sorted = [...entries].sort((a, b) => (b.likes - b.dislikes) - (a.likes - a.dislikes));
 
                 sorted.forEach(entry => {
+                    const hasVoted = votedIds.includes(entry.id);
+                    const isGolden = entry.likes >= 10;
+                    
                     const card = document.createElement('div');
-                    card.className = 'entry-card';
+                    card.className = `entry-card ${isGolden ? 'glowing-green' : ''}`;
                     card.innerHTML = `
                         <div class="entry-text">${entry.text}</div>
                         <div class="vote-bar">
-                            <button class="vote-btn like" onclick="vote(${entry.id}, 1)">👍 <span>${entry.score}</span></button>
-                            <button class="vote-btn dislike" onclick="vote(${entry.id}, -1)">👎</button>
+                            <button class="vote-btn" ${hasVoted ? 'disabled' : ''} onclick="handleVote(this, ${entry.id}, true)">
+                                🌿 <span>${entry.likes}</span>
+                            </button>
+                            <button class="vote-btn" ${hasVoted ? 'disabled' : ''} onclick="handleVote(this, ${entry.id}, false)">
+                                💩 <span>${entry.dislikes}</span>
+                            </button>
                         </div>
                     `;
-                    
                     if(entry.type === 'otlet') otletList.appendChild(card);
                     else velemenyList.appendChild(card);
                 });
             }
-
-            window.vote = (id, change) => {
-                const entry = entries.find(e => e.id === id);
-                if(entry) {
-                    entry.score += change;
-                    renderWall();
-                }
-            };
 
             renderWall();
         </script>
