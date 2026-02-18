@@ -1,5 +1,5 @@
 ---
-// Mézike ABC - Ötletláda (Interaktív animációkkal)
+// Mézike ABC - Ötletláda 2.0 (Közösségi Fal és Szavazás)
 const boltNev = "Mézike ABC";
 const cim = "1238 Budapest, Grassalkovich út (A nagy templom mögött)";
 ---
@@ -25,10 +25,9 @@ const cim = "1238 Budapest, Grassalkovich út (A nagy templom mögött)";
 				background: var(--warm-cream);
 				color: var(--deep-brown);
 				margin: 0;
-				overflow-x: hidden;
 			}
 
-			.container { max-width: 800px; margin: 0 auto; padding: 0 20px; }
+			.container { max-width: 900px; margin: 0 auto; padding: 0 20px; }
 			
 			header { 
 				background: rgba(255, 255, 255, 0.95); 
@@ -40,104 +39,93 @@ const cim = "1238 Budapest, Grassalkovich út (A nagy templom mögött)";
             .logo { font-size: 1.5rem; font-weight: bold; color: var(--ginger-brown); text-decoration: none; }
             nav a { margin: 0 10px; text-decoration: none; color: var(--deep-brown); font-weight: 600; }
 
-            .main-content { padding: 4rem 0; text-align: center; min-height: 80vh; }
+            .main-content { padding: 4rem 0; text-align: center; }
 
-            /* 1. Lépés: Választó gombok */
-            .choice-container { display: flex; justify-content: center; gap: 30px; margin-bottom: 3rem; }
+            /* Választó és Beküldő (image_acd13b.png alapján) */
+            .choice-container { display: flex; justify-content: center; gap: 30px; margin-bottom: 2rem; }
             .choice-card {
-                background: white;
-                padding: 2rem;
-                border-radius: 30px;
-                border: 3px solid var(--ginger-brown);
-                cursor: pointer;
-                transition: 0.3s;
-                width: 150px;
+                background: white; padding: 1.5rem; border-radius: 30px;
+                border: 3px solid var(--ginger-brown); cursor: pointer; transition: 0.3s; width: 140px;
             }
-            .choice-card:hover { transform: translateY(-10px); border-color: var(--shrek-green); }
             .choice-card.active { background: var(--botanical-bg); border-color: var(--shrek-green); }
-            
-            .icon { font-size: 3rem; display: block; margin-bottom: 10px; transition: 0.5s; }
+            .icon { font-size: 2.5rem; display: block; margin-bottom: 5px; }
 
-            /* Animációk: Villanykörte és Csillag */
-            @keyframes bulbFlash {
-                0% { filter: drop-shadow(0 0 0px yellow); transform: scale(1); }
-                50% { filter: drop-shadow(0 0 30px yellow); transform: scale(1.2); }
-                100% { filter: drop-shadow(0 0 10px yellow); transform: scale(1.1); }
-            }
-            .flash { animation: bulbFlash 0.6s ease-in-out infinite alternate; }
-
-            @keyframes starGlow {
-                0% { filter: drop-shadow(0 0 0px #7dbb42); transform: rotate(0deg); }
-                100% { filter: drop-shadow(0 0 25px #7dbb42); transform: rotate(15deg) scale(1.2); }
-            }
-            .glow { animation: starGlow 0.8s ease-in-out infinite alternate; }
-
-            /* 2. Lépés: Szövegdoboz */
-            #form-section { display: none; opacity: 0; transform: translateY(20px); transition: 0.5s; }
-            #form-section.visible { display: block; opacity: 1; transform: translateY(0); }
-
+            /* Szövegdoboz stílusa */
+            #form-section { display: none; margin-bottom: 4rem; }
+            #form-section.visible { display: block; }
             textarea {
-                width: 100%;
-                max-width: 500px;
-                height: 150px;
-                border-radius: 20px;
-                border: 3px solid var(--ginger-brown);
-                padding: 1.5rem;
-                font-family: inherit;
-                font-size: 1rem;
-                margin-bottom: 1.5rem;
-                resize: none;
+                width: 100%; max-width: 500px; height: 120px; border-radius: 20px;
+                border: 3px solid var(--ginger-brown); padding: 1rem; margin-bottom: 1rem; resize: none;
             }
-
             .send-btn {
-                background: var(--ginger-brown);
-                color: white;
-                border: none;
-                padding: 15px 40px;
-                border-radius: 50px;
-                font-size: 1.2rem;
-                font-weight: bold;
-                cursor: pointer;
-                transition: 0.3s;
+                background: var(--ginger-brown); color: white; border: none;
+                padding: 12px 35px; border-radius: 50px; font-weight: bold; cursor: pointer;
             }
-            .send-btn:hover { background: var(--deep-brown); transform: scale(1.05); }
 
-            /* 3. Lépés: Postaláda és Levél Animáció */
-            #mailbox-container {
-                position: fixed;
-                bottom: -300px;
-                left: 50%;
-                transform: translateX(-50%);
-                transition: 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-                z-index: 2000;
+            /* --- KÉTOSZLOPOS TÁROLÓ (ÚJ RÉSZ) --- */
+            .wall-grid {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 30px;
+                margin-top: 4rem;
+                text-align: left;
+            }
+
+            .column-title {
                 text-align: center;
+                color: var(--ginger-brown);
+                border-bottom: 3px solid var(--shrek-green);
+                padding-bottom: 10px;
+                margin-bottom: 20px;
             }
-            #mailbox-container.up { bottom: 50px; }
-            
-            .mailbox { font-size: 8rem; position: relative; }
-            .mailbox-lid { position: absolute; top: 20px; left: 20px; transition: 0.5s; transform-origin: top; }
-            .mailbox.open .mailbox-lid { transform: rotateX(-110deg); }
 
-            #envelope-animation {
-                position: fixed;
-                width: 60px;
-                height: 40px;
+            .entry-card {
                 background: white;
-                border: 2px solid var(--deep-brown);
-                display: none;
-                z-index: 2100;
-                border-radius: 5px;
+                padding: 1.5rem;
+                border-radius: 20px;
+                border: 2px solid #ddd;
+                margin-bottom: 15px;
+                box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+                transition: 0.3s;
+                position: relative;
             }
 
-            /* Sikeres üzenet */
-            #success-msg { display: none; margin-top: 2rem; font-size: 1.5rem; font-weight: bold; color: var(--shrek-green); }
+            .entry-text { font-size: 0.95rem; margin-bottom: 1rem; }
 
-            @media (max-width: 600px) {
-                .choice-container { gap: 15px; }
-                .choice-card { width: 130px; padding: 1rem; }
+            /* Szavazás gombok */
+            .vote-bar {
+                display: flex;
+                gap: 15px;
+                align-items: center;
+                border-top: 1px solid #eee;
+                padding-top: 10px;
             }
 
-			footer { background: var(--deep-brown); color: white; padding: 3rem 0; text-align: center; margin-top: 4rem; }
+            .vote-btn {
+                background: none;
+                border: none;
+                cursor: pointer;
+                font-size: 1.1rem;
+                display: flex;
+                align-items: center;
+                gap: 5px;
+                transition: 0.2s;
+                color: var(--deep-brown);
+            }
+            .vote-btn:hover { transform: scale(1.2); }
+            .like:hover { color: var(--shrek-green); }
+            .dislike:hover { color: var(--ginger-brown); }
+
+            /* Postaláda animáció konténer */
+            #mailbox-container {
+                position: fixed; bottom: -300px; left: 50%; transform: translateX(-50%);
+                transition: 0.8s; z-index: 2000; font-size: 6rem;
+            }
+            #mailbox-container.up { bottom: 30px; }
+
+            @media (max-width: 768px) {
+                .wall-grid { grid-template-columns: 1fr; }
+            }
 		</style>
 	</head>
 	<body>
@@ -154,104 +142,114 @@ const cim = "1238 Budapest, Grassalkovich út (A nagy templom mögött)";
 		</header>
 
 		<main class="container main-content">
-            <h1 id="title-text">Mocsári Ötletláda</h1>
-            <p id="sub-text">Oszd meg velünk gondolataidat névtelenül!</p>
-
-            <div class="choice-container" id="step-1">
-                <div class="choice-card" onclick="selectType('otlet', this)">
-                    <span class="icon" id="bulb-icon">💡</span>
-                    <strong>Ötlet</strong>
+            <h1>Mocsári Ötletláda</h1>
+            <div class="choice-container">
+                <div class="choice-card" id="btn-otlet">
+                    <span class="icon">💡</span><strong>Ötlet</strong>
                 </div>
-                <div class="choice-card" onclick="selectType('velemeny', this)">
-                    <span class="icon" id="star-icon">⭐</span>
-                    <strong>Vélemény</strong>
+                <div class="choice-card" id="btn-velemeny">
+                    <span class="icon">⭐</span><strong>Vélemény</strong>
                 </div>
             </div>
 
             <div id="form-section">
-                <textarea id="message" placeholder="Írd ide a mocsári üzeneted..."></textarea><br>
-                <button class="send-btn" onclick="sendMessage()">Küldés</button>
+                <textarea id="message" placeholder="Írd ide az üzeneted..."></textarea><br>
+                <button class="send-btn" id="send-btn">Küldés a ládába</button>
             </div>
 
-            <div id="success-msg">Köszönjük a véleményt, a mocsár nevében! 💚</div>
+            <div class="wall-grid">
+                <div>
+                    <h3 class="column-title">💡 Ötletek</h3>
+                    <div id="otlet-list"></div>
+                </div>
+                <div>
+                    <h3 class="column-title">⭐ Vélemények</h3>
+                    <div id="velemeny-list"></div>
+                </div>
+            </div>
 		</main>
 
-        <div id="mailbox-container">
-            <div class="mailbox" id="mailbox-body">📮</div>
-            <div id="envelope-animation"></div>
-        </div>
-
-		<footer>
-			<div class="container">
-				<p>📍 {cim}</p>
-				<p>© 2026 {boltNev}</p>
-			</div>
-		</footer>
+        <div id="mailbox-container">📮</div>
 
         <script>
-            let selectedType = "";
+            // Adatok tárolása (Adatbázis híján egyelőre a memóriában)
+            let entries = [
+                { id: 1, type: 'otlet', text: "Legyen Shrek alakú fánk!", score: 5 },
+                { id: 2, type: 'velemeny', text: "Nagyon kedves a kiszolgálás!", score: 8 }
+            ];
 
-            function selectType(type, element) {
-                selectedType = type;
-                
-                // Gombok resetelése
-                document.querySelectorAll('.choice-card').forEach(c => c.classList.remove('active'));
-                document.getElementById('bulb-icon').classList.remove('flash');
-                document.getElementById('star-icon').classList.remove('glow');
-                
-                // Aktiválás és animáció
-                element.classList.add('active');
-                if(type === 'otlet') document.getElementById('bulb-icon').classList.add('flash');
-                else document.getElementById('star-icon').classList.add('glow');
+            const formSection = document.getElementById('form-section');
+            const otletList = document.getElementById('otlet-list');
+            const velemenyList = document.getElementById('velemeny-list');
+            let currentType = "";
 
-                // Form megjelenítése
-                document.getElementById('form-section').classList.add('visible');
-            }
+            // Választás logikája
+            document.getElementById('btn-otlet').onclick = () => {
+                currentType = "otlet";
+                formSection.classList.add('visible');
+                document.getElementById('btn-otlet').classList.add('active');
+                document.getElementById('btn-velemeny').classList.remove('active');
+            };
 
-            function sendMessage() {
+            document.getElementById('btn-velemeny').onclick = () => {
+                currentType = "velemeny";
+                formSection.classList.add('visible');
+                document.getElementById('btn-velemeny').classList.add('active');
+                document.getElementById('btn-otlet').classList.remove('active');
+            };
+
+            // Beküldés és Animáció
+            document.getElementById('send-btn').onclick = () => {
                 const text = document.getElementById('message').value;
-                if(!text) return alert("Kérlek, írj valamit a papírra!");
+                if(!text) return;
 
-                const btn = document.querySelector('.send-btn');
-                const form = document.getElementById('form-section');
-                const mailboxContainer = document.getElementById('mailbox-container');
-                const envelope = document.getElementById('envelope-animation');
-
-                btn.style.display = 'none';
-
-                // 1. Postaláda beúszik
-                mailboxContainer.classList.add('up');
-
+                // Új elem hozzáadása
+                entries.push({ id: Date.now(), type: currentType, text: text, score: 0 });
+                
+                // Postaláda animáció
+                const mailbox = document.getElementById('mailbox-container');
+                mailbox.classList.add('up');
+                
                 setTimeout(() => {
-                    // 2. Levél animáció indítása
-                    const rect = document.getElementById('message').getBoundingClientRect();
-                    envelope.style.display = 'block';
-                    envelope.style.left = rect.left + (rect.width / 2) - 30 + 'px';
-                    envelope.style.top = rect.top + 'px';
-                    envelope.style.opacity = '1';
+                    mailbox.classList.remove('up');
+                    document.getElementById('message').value = "";
+                    renderWall();
+                }, 2000);
+            };
 
-                    // 3. Papír borítékká hajlik és berepül
-                    setTimeout(() => {
-                        envelope.style.transition = "1s ease-in-out";
-                        envelope.style.transform = "scale(0.5) rotate(720deg)";
-                        envelope.style.left = "50%";
-                        envelope.style.top = (window.innerHeight - 150) + "px";
-                        envelope.style.opacity = "0";
-                    }, 100);
+            // Megjelenítés és szavazás alapú rendezés
+            function renderWall() {
+                otletList.innerHTML = "";
+                velemenyList.innerHTML = "";
 
-                    // 4. Befejezés
-                    setTimeout(() => {
-                        form.style.display = 'none';
-                        document.getElementById('step-1').style.display = 'none';
-                        document.getElementById('title-text').style.display = 'none';
-                        document.getElementById('sub-text').style.display = 'none';
-                        document.getElementById('success-msg').style.display = 'block';
-                        
-                        // Postaláda visszaugrik
-                        setTimeout(() => mailboxContainer.classList.remove('up'), 2000);
-                    }, 1100);
-                }, 800);
+                // Pontszám szerint csökkenő sorrend
+                const sorted = [...entries].sort((a, b) => b.score - a.score);
+
+                sorted.forEach(entry => {
+                    const card = document.createElement('div');
+                    card.className = 'entry-card';
+                    card.innerHTML = `
+                        <div class="entry-text">${entry.text}</div>
+                        <div class="vote-bar">
+                            <button class="vote-btn like" onclick="vote(${entry.id}, 1)">👍 <span>${entry.score}</span></button>
+                            <button class="vote-btn dislike" onclick="vote(${entry.id}, -1)">👎</button>
+                        </div>
+                    `;
+                    
+                    if(entry.type === 'otlet') otletList.appendChild(card);
+                    else velemenyList.appendChild(card);
+                });
             }
+
+            window.vote = (id, change) => {
+                const entry = entries.find(e => e.id === id);
+                if(entry) {
+                    entry.score += change;
+                    renderWall();
+                }
+            };
+
+            renderWall();
         </script>
 	</body>
 </html>
